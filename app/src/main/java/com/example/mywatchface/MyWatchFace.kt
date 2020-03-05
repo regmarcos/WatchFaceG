@@ -20,11 +20,9 @@ import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
 import android.view.SurfaceHolder
-import android.widget.Toast
 
 import java.lang.ref.WeakReference
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 
 /**
  * Updates rate in milliseconds for interactive mode. We update once a second to advance the
@@ -103,10 +101,14 @@ class MyWatchFace : CanvasWatchFaceService() {
         private lateinit var mBackgroundPaint: Paint
         private lateinit var mBackgroundBitmap: Bitmap
         private lateinit var mGrayBackgroundBitmap: Bitmap
+        private var colorBackground = 0
 
         private var mAmbient: Boolean = false
         private var mLowBitAmbient: Boolean = false
         private var mBurnInProtection: Boolean = false
+
+        private var onTapEnabled = false
+        private var newColor = false
 
         /* Handler to update the time once a second in interactive mode. */
         private val mUpdateTimeHandler = EngineHandler(this)
@@ -354,12 +356,15 @@ class MyWatchFace : CanvasWatchFaceService() {
                 }
                 WatchFaceService.TAP_TYPE_TOUCH_CANCEL -> {
                     // The user has started a different gesture or otherwise cancelled the tap.
+                    onTapEnabled = false
                 }
-                WatchFaceService.TAP_TYPE_TAP ->
+                WatchFaceService.TAP_TYPE_TAP -> {
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
-                    Toast.makeText(applicationContext, R.string.message, Toast.LENGTH_SHORT)
-                        .show()
+                    onTapEnabled = true
+                    newColor = true
+                }
+
             }
             invalidate()
         }
@@ -368,7 +373,6 @@ class MyWatchFace : CanvasWatchFaceService() {
         override fun onDraw(canvas: Canvas, bounds: Rect) {
             val now = System.currentTimeMillis()
             mCalendar.timeInMillis = now
-
             drawBackground(canvas)
             drawWatchFace(canvas)
         }
@@ -379,9 +383,23 @@ class MyWatchFace : CanvasWatchFaceService() {
                 canvas.drawColor(Color.BLACK)
             } else if (mAmbient) {
                 canvas.drawBitmap(mGrayBackgroundBitmap, 0f, 0f, mBackgroundPaint)
-            } else {
+            } else if (onTapEnabled && newColor){
+                colorBackground = getRandomColor()
+                canvas.drawColor(colorBackground)
+                newColor = false
+            } else if (onTapEnabled && !newColor){
+                canvas.drawColor(colorBackground)
+            }else{
                 canvas.drawBitmap(mBackgroundBitmap, 0f, 0f, mBackgroundPaint)
             }
+        }
+
+        private fun getRandomColor(): Int {
+            val random = Random()
+            return Color.argb(ALPHA, random.nextInt(RGB_POSSIBLE_VALUES),
+                random.nextInt(RGB_POSSIBLE_VALUES),
+                random.nextInt(RGB_POSSIBLE_VALUES))
+
         }
 
         private fun drawWatchFace(canvas: Canvas) {
