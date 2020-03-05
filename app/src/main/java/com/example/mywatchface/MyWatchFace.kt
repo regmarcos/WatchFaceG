@@ -360,15 +360,12 @@ class MyWatchFace : CanvasWatchFaceService() {
                 }
                 WatchFaceService.TAP_TYPE_TAP -> {
                     // The user has completed the tap gesture.
-                    // TODO: Add code to handle the tap gesture.
                     onTapEnabled = true
                     newColor = true
                 }
-
             }
             invalidate()
         }
-
 
         override fun onDraw(canvas: Canvas, bounds: Rect) {
             val now = System.currentTimeMillis()
@@ -383,23 +380,24 @@ class MyWatchFace : CanvasWatchFaceService() {
                 canvas.drawColor(Color.BLACK)
             } else if (mAmbient) {
                 canvas.drawBitmap(mGrayBackgroundBitmap, 0f, 0f, mBackgroundPaint)
-            } else if (onTapEnabled && newColor){
+            } else if (onTapEnabled && newColor) {
                 colorBackground = getRandomColor()
                 canvas.drawColor(colorBackground)
                 newColor = false
-            } else if (onTapEnabled && !newColor){
+            } else if (onTapEnabled && !newColor) {
                 canvas.drawColor(colorBackground)
-            }else{
+            } else {
                 canvas.drawBitmap(mBackgroundBitmap, 0f, 0f, mBackgroundPaint)
             }
         }
 
         private fun getRandomColor(): Int {
             val random = Random()
-            return Color.argb(ALPHA, random.nextInt(RGB_POSSIBLE_VALUES),
+            return Color.argb(
+                ALPHA, random.nextInt(RGB_POSSIBLE_VALUES),
                 random.nextInt(RGB_POSSIBLE_VALUES),
-                random.nextInt(RGB_POSSIBLE_VALUES))
-
+                random.nextInt(RGB_POSSIBLE_VALUES)
+            )
         }
 
         private fun drawWatchFace(canvas: Canvas) {
