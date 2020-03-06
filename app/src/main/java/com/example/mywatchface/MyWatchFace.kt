@@ -22,7 +22,9 @@ import android.support.wearable.watchface.WatchFaceStyle
 import android.view.SurfaceHolder
 
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.Calendar
+import java.util.Random
+import java.util.TimeZone
 
 /**
  * Updates rate in milliseconds for interactive mode. We update once a second to advance the
@@ -81,12 +83,12 @@ class MyWatchFace : CanvasWatchFaceService() {
 
         private var mRegisteredTimeZoneReceiver = false
         private var mMuteMode: Boolean = false
-        private var mCenterX: Float = 0F
-        private var mCenterY: Float = 0F
+        private var mCenterX: Float = ZERO_FLOAT
+        private var mCenterY: Float = ZERO_FLOAT
 
-        private var mSecondHandLength: Float = 0F
-        private var sMinuteHandLength: Float = 0F
-        private var sHourHandLength: Float = 0F
+        private var mSecondHandLength: Float = ZERO_FLOAT
+        private var sMinuteHandLength: Float = ZERO_FLOAT
+        private var sHourHandLength: Float = ZERO_FLOAT
 
         /* Colors for all hands (hour, minute, seconds, ticks) based on photo loaded. */
         private var mWatchHandColor: Int = 0
@@ -164,7 +166,7 @@ class MyWatchFace : CanvasWatchFaceService() {
                 isAntiAlias = true
                 strokeCap = Paint.Cap.ROUND
                 setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
             }
 
@@ -174,7 +176,7 @@ class MyWatchFace : CanvasWatchFaceService() {
                 isAntiAlias = true
                 strokeCap = Paint.Cap.ROUND
                 setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
             }
 
@@ -184,7 +186,7 @@ class MyWatchFace : CanvasWatchFaceService() {
                 isAntiAlias = true
                 strokeCap = Paint.Cap.ROUND
                 setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
             }
 
@@ -194,7 +196,7 @@ class MyWatchFace : CanvasWatchFaceService() {
                 isAntiAlias = true
                 style = Paint.Style.STROKE
                 setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
             }
         }
@@ -259,16 +261,16 @@ class MyWatchFace : CanvasWatchFaceService() {
                 mTickAndCirclePaint.isAntiAlias = true
 
                 mHourPaint.setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
                 mMinutePaint.setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
                 mSecondPaint.setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
                 mTickAndCirclePaint.setShadowLayer(
-                    SHADOW_RADIUS, 0f, 0f, mWatchHandShadowColor
+                    SHADOW_RADIUS, ZERO_FLOAT, ZERO_FLOAT, mWatchHandShadowColor
                 )
             }
         }
@@ -339,10 +341,10 @@ class MyWatchFace : CanvasWatchFaceService() {
             val canvas = Canvas(mGrayBackgroundBitmap)
             val grayPaint = Paint()
             val colorMatrix = ColorMatrix()
-            colorMatrix.setSaturation(0f)
+            colorMatrix.setSaturation(ZERO_FLOAT)
             val filter = ColorMatrixColorFilter(colorMatrix)
             grayPaint.colorFilter = filter
-            canvas.drawBitmap(mBackgroundBitmap, 0f, 0f, grayPaint)
+            canvas.drawBitmap(mBackgroundBitmap, ZERO_FLOAT, ZERO_FLOAT, grayPaint)
         }
 
         /**
@@ -379,7 +381,7 @@ class MyWatchFace : CanvasWatchFaceService() {
             if (mAmbient && (mLowBitAmbient || mBurnInProtection)) {
                 canvas.drawColor(Color.BLACK)
             } else if (mAmbient) {
-                canvas.drawBitmap(mGrayBackgroundBitmap, 0f, 0f, mBackgroundPaint)
+                canvas.drawBitmap(mGrayBackgroundBitmap, ZERO_FLOAT, ZERO_FLOAT, mBackgroundPaint)
             } else if (onTapEnabled && newColor) {
                 colorBackground = getRandomColor()
                 canvas.drawColor(colorBackground)
@@ -387,7 +389,7 @@ class MyWatchFace : CanvasWatchFaceService() {
             } else if (onTapEnabled && !newColor) {
                 canvas.drawColor(colorBackground)
             } else {
-                canvas.drawBitmap(mBackgroundBitmap, 0f, 0f, mBackgroundPaint)
+                canvas.drawBitmap(mBackgroundBitmap, ZERO_FLOAT, ZERO_FLOAT, mBackgroundPaint)
             }
         }
 
