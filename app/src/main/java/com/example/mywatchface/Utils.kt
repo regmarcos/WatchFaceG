@@ -20,3 +20,11 @@ const val OFFSET = 30
 const val HOUR_HAND_OFFSET = 2f
 const val ONE_ROUND = Math.PI * 2.0
 const val INNER_TICK_RADIUS_OFFSET = 10
+
+const val SECONDS_HAND_LENGTH = 0.875
+const val MINUTES_HAND_LENGTH = 0.75
+const val HOURS_HAND_LENGTH = 0.5
+const val MIDDLE = 2f
+const val SECONDS_ALPHA = 80
+const val MINUTES_ALPHA = 100
+const val HOURS_ALPHA = 100

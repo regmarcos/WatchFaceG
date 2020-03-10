@@ -6,6 +6,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.wearable.watchface.WatchFaceService
 import android.view.SurfaceHolder
+import com.example.mywatchface.ALPHA
+import com.example.mywatchface.HOURS_ALPHA
+import com.example.mywatchface.HOURS_HAND_LENGTH
+import com.example.mywatchface.MIDDLE
+import com.example.mywatchface.MINUTES_ALPHA
+import com.example.mywatchface.MINUTES_HAND_LENGTH
+import com.example.mywatchface.SECONDS_ALPHA
+import com.example.mywatchface.SECONDS_HAND_LENGTH
 import com.example.mywatchface.ZERO_FLOAT
 import com.example.mywatchface.mvp.WatchFaceContract
 import java.util.Calendar
@@ -46,20 +54,20 @@ class WatchFacePresenter(private val view: WatchFaceContract.WatchFaceView) :
         /* Dim display in mute mode. */
         if (mMuteMode != inMuteMode) {
             mMuteMode = inMuteMode
-            view.mHourPaint.alpha = if (inMuteMode) 100 else 255
-            view.mMinutePaint.alpha = if (inMuteMode) 100 else 255
-            view.mSecondPaint.alpha = if (inMuteMode) 80 else 255
+            view.mHourPaint.alpha = if (inMuteMode) HOURS_ALPHA else ALPHA
+            view.mMinutePaint.alpha = if (inMuteMode) MINUTES_ALPHA else ALPHA
+            view.mSecondPaint.alpha = if (inMuteMode) SECONDS_ALPHA else ALPHA
             return true
         }
         return false
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        view.mCenterX = width / 2f
-        view.mCenterY = height / 2f
-        view.mSecondHandLength = (view.mCenterX * 0.875).toFloat()
-        view.sMinuteHandLength = (view.mCenterX * 0.75).toFloat()
-        view.sHourHandLength = (view.mCenterX * 0.5).toFloat()
+        view.mCenterX = width / MIDDLE
+        view.mCenterY = height / MIDDLE
+        view.mSecondHandLength = (view.mCenterX * SECONDS_HAND_LENGTH).toFloat()
+        view.sMinuteHandLength = (view.mCenterX * MINUTES_HAND_LENGTH).toFloat()
+        view.sHourHandLength = (view.mCenterX * HOURS_HAND_LENGTH).toFloat()
 
         val scale = width.toFloat() / view.mBackgroundBitmap.width.toFloat()
 
