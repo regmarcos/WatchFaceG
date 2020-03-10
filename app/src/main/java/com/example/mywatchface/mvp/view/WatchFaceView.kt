@@ -26,10 +26,32 @@ import com.example.mywatchface.ZERO_FLOAT
 import com.example.mywatchface.mvp.WatchFaceContract
 import java.util.Calendar
 import java.util.Random
+import java.util.TimeZone
 import kotlin.math.cos
 import kotlin.math.sin
 
-class WatchFaceView: WatchFaceContract.WatchFaceView() {
+class WatchFaceView: WatchFaceContract.WatchFaceView {
+
+    override var mCalendar: Calendar = Calendar.getInstance(TimeZone.getDefault())
+    override var mCenterX: Float = ZERO_FLOAT
+    override var mCenterY: Float = ZERO_FLOAT
+    override var mSecondHandLength: Float = ZERO_FLOAT
+    override var sMinuteHandLength: Float = ZERO_FLOAT
+    override var sHourHandLength: Float = ZERO_FLOAT
+    /* Colors for all hands (hour, minute, seconds, ticks) based on photo loaded. */
+    private var mWatchHandColor: Int = 0
+    private var mWatchHandHighlightColor: Int = 0
+    private var mWatchHandShadowColor: Int = 0
+    override lateinit var mHourPaint: Paint
+    override lateinit var mMinutePaint: Paint
+    override lateinit var mSecondPaint: Paint
+    private lateinit var mTickAndCirclePaint: Paint
+    override lateinit var mBackgroundPaint: Paint
+    override lateinit var mBackgroundBitmap: Bitmap
+    override lateinit var mGrayBackgroundBitmap: Bitmap
+    override var colorBackground = 0
+    override var mLowBitAmbient: Boolean = false
+    override var mBurnInProtection: Boolean = false
 
     override fun initializeBackground(background: Bitmap, mAmbient: Boolean) { //View
         mBackgroundPaint = Paint().apply {

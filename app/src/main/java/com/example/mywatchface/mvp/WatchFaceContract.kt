@@ -5,50 +5,43 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.SurfaceHolder
-import com.example.mywatchface.ZERO_FLOAT
 import java.util.Calendar
-import java.util.TimeZone
 
-open class WatchFaceContract {
+interface WatchFaceContract {
 
-    abstract class WatchFaceView {
+    interface WatchFaceView {
 
-        var mCalendar: Calendar = Calendar.getInstance(TimeZone.getDefault())
-        var mCenterX: Float = ZERO_FLOAT
-        var mCenterY: Float = ZERO_FLOAT
-        var mSecondHandLength: Float = ZERO_FLOAT
-        var sMinuteHandLength: Float = ZERO_FLOAT
-        var sHourHandLength: Float = ZERO_FLOAT
-        /* Colors for all hands (hour, minute, seconds, ticks) based on photo loaded. */
-        protected var mWatchHandColor: Int = 0
-        protected var mWatchHandHighlightColor: Int = 0
-        protected var mWatchHandShadowColor: Int = 0
-        lateinit var mHourPaint: Paint
-        lateinit var mMinutePaint: Paint
-        lateinit var mSecondPaint: Paint
-        protected lateinit var mTickAndCirclePaint: Paint
-        lateinit var mBackgroundPaint: Paint
-        lateinit var mBackgroundBitmap: Bitmap
-        lateinit var mGrayBackgroundBitmap: Bitmap
-        var colorBackground = 0
-        var mLowBitAmbient: Boolean = false
-        var mBurnInProtection: Boolean = false
+        var mCalendar: Calendar
+        var mCenterX: Float
+        var mCenterY: Float
+        var mSecondHandLength: Float
+        var sMinuteHandLength: Float
+        var sHourHandLength: Float
+        var mHourPaint: Paint
+        var mMinutePaint: Paint
+        var mSecondPaint: Paint
+        var mBackgroundPaint: Paint
+        var mBackgroundBitmap: Bitmap
+        var mGrayBackgroundBitmap: Bitmap
+        var colorBackground: Int
+        var mLowBitAmbient: Boolean
+        var mBurnInProtection: Boolean
 
-        abstract fun initializeBackground(background: Bitmap, mAmbient: Boolean)
-        abstract fun initializeWatchFace()
-        abstract fun updateWatchHandStyle(mAmbient: Boolean)
-        abstract fun initGrayBackgroundBitmap()
-        abstract fun getRandomColor(): Int
-        abstract fun drawWatchFace(canvas: Canvas, mAmbient: Boolean)
+        fun initializeBackground(background: Bitmap, mAmbient: Boolean)
+        fun initializeWatchFace()
+        fun updateWatchHandStyle(mAmbient: Boolean)
+        fun initGrayBackgroundBitmap()
+        fun getRandomColor(): Int
+        fun drawWatchFace(canvas: Canvas, mAmbient: Boolean)
     }
 
-    abstract class WatchFacePresenter {
-        abstract fun init(background: Bitmap)
-        abstract fun propertiesChanged(properties: Bundle)
-        abstract fun ambientModeChanged(inAmbientMode: Boolean)
-        abstract fun interrumptionFilterChanged(interruptionFilter: Int): Boolean
-        abstract fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int)
-        abstract fun drawBackground(canvas: Canvas)
-        abstract fun setDefaultTimeZone()
+    interface WatchFacePresenter {
+        fun init(background: Bitmap)
+        fun propertiesChanged(properties: Bundle)
+        fun ambientModeChanged(inAmbientMode: Boolean)
+        fun interrumptionFilterChanged(interruptionFilter: Int): Boolean
+        fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int)
+        fun drawBackground(canvas: Canvas)
+        fun setDefaultTimeZone()
     }
 }

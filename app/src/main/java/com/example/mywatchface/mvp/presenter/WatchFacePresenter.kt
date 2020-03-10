@@ -20,7 +20,7 @@ import java.util.Calendar
 import java.util.TimeZone
 
 class WatchFacePresenter(private val view: WatchFaceContract.WatchFaceView) :
-    WatchFaceContract.WatchFacePresenter() {
+    WatchFaceContract.WatchFacePresenter {
 
     private var mMuteMode: Boolean = false
     var onTapEnabled = false
