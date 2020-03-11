@@ -6,14 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.wearable.watchface.WatchFaceService
 import android.view.SurfaceHolder
-import com.example.mywatchface.ALPHA
-import com.example.mywatchface.HOURS_ALPHA
-import com.example.mywatchface.HOURS_HAND_LENGTH
-import com.example.mywatchface.MIDDLE
-import com.example.mywatchface.MINUTES_ALPHA
-import com.example.mywatchface.MINUTES_HAND_LENGTH
-import com.example.mywatchface.SECONDS_ALPHA
-import com.example.mywatchface.SECONDS_HAND_LENGTH
+import com.example.mywatchface.MARGIN_DRAW_BITMAP
 import com.example.mywatchface.ZERO_FLOAT
 import com.example.mywatchface.mvp.WatchFaceContract
 import java.util.Calendar
@@ -28,24 +21,19 @@ class WatchFacePresenter(private val view: WatchFaceContract.WatchFaceView) :
     var mAmbient: Boolean = false
 
     override fun init(background: Bitmap) {
-        view.mCalendar = Calendar.getInstance()
+        view.setMCalendar(Calendar.getInstance())
         view.initializeBackground(background, mAmbient)
         view.initializeWatchFace()
     }
 
     override fun propertiesChanged(properties: Bundle) {
-        view.mLowBitAmbient = properties.getBoolean(
-            WatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false
-        )
-        view.mBurnInProtection = properties.getBoolean(
-            WatchFaceService.PROPERTY_BURN_IN_PROTECTION, false
-        )
+        view.setMLowBitAmbient(properties.getBoolean(WatchFaceService.PROPERTY_LOW_BIT_AMBIENT, false))
+        view.setMBurnInProtection(properties.getBoolean(WatchFaceService.PROPERTY_BURN_IN_PROTECTION, false))
     }
 
     override fun ambientModeChanged(inAmbientMode: Boolean) {
         mAmbient = inAmbientMode
         view.updateWatchHandStyle(mAmbient)
-
     }
 
     override fun interrumptionFilterChanged(interruptionFilter: Int): Boolean {
@@ -54,58 +42,41 @@ class WatchFacePresenter(private val view: WatchFaceContract.WatchFaceView) :
         /* Dim display in mute mode. */
         if (mMuteMode != inMuteMode) {
             mMuteMode = inMuteMode
-            view.mHourPaint.alpha = if (inMuteMode) HOURS_ALPHA else ALPHA
-            view.mMinutePaint.alpha = if (inMuteMode) MINUTES_ALPHA else ALPHA
-            view.mSecondPaint.alpha = if (inMuteMode) SECONDS_ALPHA else ALPHA
+            view.setAlphas(inMuteMode)
             return true
         }
         return false
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        view.mCenterX = width / MIDDLE
-        view.mCenterY = height / MIDDLE
-        view.mSecondHandLength = (view.mCenterX * SECONDS_HAND_LENGTH).toFloat()
-        view.sMinuteHandLength = (view.mCenterX * MINUTES_HAND_LENGTH).toFloat()
-        view.sHourHandLength = (view.mCenterX * HOURS_HAND_LENGTH).toFloat()
-
-        val scale = width.toFloat() / view.mBackgroundBitmap.width.toFloat()
-
-        view.mBackgroundBitmap = Bitmap.createScaledBitmap(
-            view.mBackgroundBitmap,
-            (view.mBackgroundBitmap.width * scale).toInt(),
-            (view.mBackgroundBitmap.height * scale).toInt(), true
-        )
-        if (!view.mBurnInProtection && !view.mLowBitAmbient) {
-            view.initGrayBackgroundBitmap()
-        }
+        view.surfaceChanged(holder, format, width, height)
     }
 
     override fun drawBackground(canvas: Canvas) {
         val now = System.currentTimeMillis()
-        view.mCalendar.timeInMillis = now
-        if (mAmbient && (view.mLowBitAmbient || view.mBurnInProtection)) {
+        view.getMCalendar().timeInMillis = now
+        if (mAmbient && (view.getMLowBitAmbient() || view.getMBurnInProtection())) {
             canvas.drawColor(Color.BLACK)
         } else if (mAmbient) {
             canvas.drawBitmap(
-                view.mGrayBackgroundBitmap,
+                view.getMGrayBackgroundBitmap(),
                 ZERO_FLOAT,
                 ZERO_FLOAT,
-                view.mBackgroundPaint
+                view.getMBackgroundPaint()
             )
         } else if (onTapEnabled && newColor) {
-            view.colorBackground = view.getRandomColor()
-            canvas.drawColor(view.colorBackground)
+            view.setColorBackground(view.getRandomColor())
+            canvas.drawColor(view.getColorBackground())
             newColor = false
         } else if (onTapEnabled && !newColor) {
-            canvas.drawColor(view.colorBackground)
+            canvas.drawColor(view.getColorBackground())
         } else {
-            canvas.drawBitmap(view.mBackgroundBitmap, ZERO_FLOAT, ZERO_FLOAT, view.mBackgroundPaint)
+            canvas.drawBitmap(view.getMBackgroundBitmap(), MARGIN_DRAW_BITMAP, MARGIN_DRAW_BITMAP, view.getMBackgroundPaint())
         }
         view.drawWatchFace(canvas, mAmbient)
     }
 
     override fun setDefaultTimeZone() {
-        view.mCalendar.timeZone = TimeZone.getDefault()
+        view.setTimeZone(TimeZone.getDefault())
     }
 }

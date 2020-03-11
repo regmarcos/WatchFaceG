@@ -6,33 +6,31 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.view.SurfaceHolder
 import java.util.Calendar
+import java.util.TimeZone
 
 interface WatchFaceContract {
 
     interface WatchFaceView {
-
-        var mCalendar: Calendar
-        var mCenterX: Float
-        var mCenterY: Float
-        var mSecondHandLength: Float
-        var sMinuteHandLength: Float
-        var sHourHandLength: Float
-        var mHourPaint: Paint
-        var mMinutePaint: Paint
-        var mSecondPaint: Paint
-        var mBackgroundPaint: Paint
-        var mBackgroundBitmap: Bitmap
-        var mGrayBackgroundBitmap: Bitmap
-        var colorBackground: Int
-        var mLowBitAmbient: Boolean
-        var mBurnInProtection: Boolean
-
         fun initializeBackground(background: Bitmap, mAmbient: Boolean)
         fun initializeWatchFace()
         fun updateWatchHandStyle(mAmbient: Boolean)
         fun initGrayBackgroundBitmap()
         fun getRandomColor(): Int
         fun drawWatchFace(canvas: Canvas, mAmbient: Boolean)
+        fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int)
+        fun setAlphas(inMuteMode: Boolean)
+        fun getColorBackground(): Int
+        fun setColorBackground(color: Int)
+        fun getMCalendar(): Calendar
+        fun setMCalendar(calendar: Calendar)
+        fun setTimeZone(timeZone: TimeZone)
+        fun getMBackgroundBitmap(): Bitmap
+        fun getMLowBitAmbient(): Boolean
+        fun setMLowBitAmbient(state: Boolean)
+        fun getMBurnInProtection(): Boolean
+        fun setMBurnInProtection(state: Boolean)
+        fun getMBackgroundPaint(): Paint
+        fun getMGrayBackgroundBitmap(): Bitmap
     }
 
     interface WatchFacePresenter {
@@ -43,5 +41,6 @@ interface WatchFaceContract {
         fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int)
         fun drawBackground(canvas: Canvas)
         fun setDefaultTimeZone()
+
     }
 }
