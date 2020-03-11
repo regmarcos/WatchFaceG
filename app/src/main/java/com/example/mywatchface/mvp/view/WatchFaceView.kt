@@ -169,7 +169,6 @@ class WatchFaceView: WatchFaceContract.WatchFaceView {
                 mCenterY - mSecondHandLength,
                 mSecondPaint
             )
-
         }
         canvas.drawCircle(mCenterX, mCenterY, CENTER_GAP_AND_CIRCLE_RADIUS, mTickAndCirclePaint)
         canvas.restore()
@@ -181,18 +180,16 @@ class WatchFaceView: WatchFaceContract.WatchFaceView {
         mSecondHandLength = (mCenterX * SECONDS_HAND_LENGTH).toFloat()
         sMinuteHandLength = (mCenterX * MINUTES_HAND_LENGTH).toFloat()
         sHourHandLength = (mCenterX * HOURS_HAND_LENGTH).toFloat()
-
         val scale = width.toFloat() / getMBackgroundBitmap().width.toFloat()
-
         mBackgroundBitmap = Bitmap.createScaledBitmap(
             mBackgroundBitmap,
             (mBackgroundBitmap.width * scale).toInt(),
-            (mBackgroundBitmap.height * scale).toInt(), true
+            (mBackgroundBitmap.height * scale).toInt(),
+            true
         )
         if (!mBurnInProtection && !mLowBitAmbient) {
             initGrayBackgroundBitmap()
         }
-
     }
 
     override fun setAlphas(inMuteMode: Boolean) {

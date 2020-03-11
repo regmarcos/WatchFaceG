@@ -37,7 +37,6 @@ class WatchFacePresenter(private val view: WatchFaceContract.WatchFaceView) : Wa
 
     override fun interrumptionFilterChanged(interruptionFilter: Int): Boolean {
         val inMuteMode = interruptionFilter == WatchFaceService.INTERRUPTION_FILTER_NONE
-
         /* Dim display in mute mode. */
         if (mMuteMode != inMuteMode) {
             mMuteMode = inMuteMode
